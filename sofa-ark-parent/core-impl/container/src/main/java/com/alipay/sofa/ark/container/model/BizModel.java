@@ -386,12 +386,18 @@ public class BizModel implements Biz {
             denyImportPackages = null;
             denyImportClasses = null;
             denyImportResources = null;
-            recycleBizTempWorkDir(bizTempWorkDir);
-            bizTempWorkDir = null;
             if (classLoader instanceof AbstractClasspathClassLoader) {
-                ((AbstractClasspathClassLoader) classLoader).clearCache();
+                try {
+                    ((AbstractClasspathClassLoader) classLoader).close();
+                    ((AbstractClasspathClassLoader) classLoader).clearCache();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
             classLoader = null;
+            recycleBizTempWorkDir(bizTempWorkDir);
+            bizTempWorkDir = null;
+
             ClassLoaderUtils.popContextClassLoader(oldClassLoader);
             eventAdminService.sendEvent(new AfterBizStopEvent(this));
         }
