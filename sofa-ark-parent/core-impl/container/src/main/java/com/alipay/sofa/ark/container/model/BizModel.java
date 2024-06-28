@@ -390,7 +390,7 @@ public class BizModel implements Biz {
                 try {
                     ((AbstractClasspathClassLoader) classLoader).close();
                     ((AbstractClasspathClassLoader) classLoader).clearCache();
-                } catch (IOException e) {
+                } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             }
